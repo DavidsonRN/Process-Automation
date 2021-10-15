@@ -84,9 +84,9 @@ a1 %>% filter(indicatorname=="Case notification rate, bacteriologically positive
   TRUE ~ "Error or incomplete data.")) %>% view()
 
 ##DRTB
-###Computation with BC Comment
+###Computation with DRTB Comment
 ####All Levels
-a1 %>% filter(indicatorname=="Treatment Success, DRTB (inc. RR-,MDR-, and XDR-TB)", periodvalue %in% c("APR-JUN-2020", "JUL-SEP-2020"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level) %>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2020`, Q3=`JUL-SEP-2020`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, BC_Comment=case_when(
+a1 %>% filter(indicatorname=="Treatment Success, DRTB (inc. RR-,MDR-, and XDR-TB)", periodvalue %in% c("APR-JUN-2020", "JUL-SEP-2020"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level) %>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2020`, Q3=`JUL-SEP-2020`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, DRTB_Comment=case_when(
   pct.diff < -50 ~ "Your reported DRTB Treatment Outcome has dramatically reduced since last quarter.",
   pct.diff < 0 ~ "Your reported DRTB Treatment Outcome has reducedd since last quarter",
   pct.diff < 50 ~ "Your reported DRTB Treatment Outcomet has increased increased since last quarter",
@@ -94,9 +94,9 @@ a1 %>% filter(indicatorname=="Treatment Success, DRTB (inc. RR-,MDR-, and XDR-TB
   TRUE ~ "Error or incomplete data.")) %>% view()
 
 ##POP Testing
-###Computation with BC Comment
+###Computation with PT Comment
 ####All Levels
-a1 %>% filter(indicatorname=="Population testing rate", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level) %>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, BC_Comment=case_when(
+a1 %>% filter(indicatorname=="Population testing rate", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level) %>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, PT_Comment=case_when(
   pct.diff < -50 ~ "Your reported Population Testing has dramatically reduced since last quarter.",
   pct.diff < 0 ~ "Your reported Population Testing has reducedd since last quarter",
   pct.diff < 50 ~ "Your reported Population Testing has increased increased since last quarter",
@@ -104,9 +104,9 @@ a1 %>% filter(indicatorname=="Population testing rate", periodvalue %in% c("APR-
   TRUE ~ "Error or incomplete data.")) %>% view()
 
 ##TPT
-###Computation with BC Comment
+###Computation with TPT Comment
 ####All Levels
-a1 %>% filter(indicatorname=="Eligible under-five contacts started LTBI treatment", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level) %>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, BC_Comment=case_when(
+a2 <- a1 %>% filter(indicatorname=="Eligible under-five contacts started LTBI treatment", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level) %>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, TPT_Comment=case_when(
   pct.diff < -50 ~ "Your reported TB Preventive Treatment has dramatically reduced since last quarter.",
   pct.diff < 1 ~ "Your reported TB Preventive Treatment has reducedd since last quarter",
   pct.diff < 50 ~ "Your reported TB Preventive Treatment has increased increased since last quarter",
@@ -115,18 +115,33 @@ a1 %>% filter(indicatorname=="Eligible under-five contacts started LTBI treatmen
 
 
 
-####
 
 ###diff is (-50% or lower) comment: "Your reported BC enrollment has dramatically reduced by xx% since the previous period. We suggest you work on...."
 ###diff is (0% or -50%) comment: "Your reported BC enrollment has reduced by xx% since the previous period. We suggest you work on...."
 ###diff is (0% or 50%) comment: "Your reported BC enrollment has increased by xx% since the previous period. Congratulations, keep up the good work!...."
 ###diff is (50% or higher) comment: "Your reported BC enrollment has increased by xx% since the previous period. You're one of the best in the country!..."
 
-####EXtract then put into a text file / own column 
 
-####Save each text file to folder structure
+##EXtract then put into a text file / own column --- file step loop .txt .msg. and .pdf
+###Sample
+test <- a2 %>% filter(districtname=="City of Cabanatuan")
+nmbr <- 1
+setwd("C:/Users/ACER/Downloads/tEST")
+for (muni in test$facilityname) {
+print(muni)
+  nmbr <- nmbr+1
+  print(nmbr)
+  file.create(paste0(muni,".msg"))
+} 
 
-####Zip file or nested zips (all)
+  
+
+
+
+
+####Save each text file to folder structure 
+
+####Zip file or nested zips (all)----zip and group together
 
 ###Row(textfiles - levels)
 
@@ -144,7 +159,6 @@ a1 %>% filter(indicatorname=="Eligible under-five contacts started LTBI treatmen
 ###Email Message (REady to Send)
 
 ###Text Msg for RACE (Profile)
-
 
 ##Google Drive Link / ITIS Cloud / Zip for now
 
