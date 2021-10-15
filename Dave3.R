@@ -106,15 +106,6 @@ a1 %>% filter(indicatorname=="Population testing rate", periodvalue %in% c("APR-
 
 
 
-
-
-
-
-
-
-
-
-
 ####
 
 ###diff is (-50% or lower) comment: "Your reported BC enrollment has dramatically reduced by xx% since the previous period. We suggest you work on...."
