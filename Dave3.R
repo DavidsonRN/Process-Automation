@@ -103,16 +103,15 @@ a1 %>% filter(indicatorname=="Population testing rate", periodvalue %in% c("APR-
   pct.diff > 51 ~ "Your reported Population Testing has dramatically increased since last quarter",
   TRUE ~ "Error or incomplete data.")) %>% view()
 
-
-
-
-
-
-
-
-
-
-
+##TPT
+###Computation with BC Comment
+####All Levels
+a1 %>% filter(indicatorname=="Eligible under-five contacts started LTBI treatment", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level) %>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, BC_Comment=case_when(
+  pct.diff < -50 ~ "Your reported TB Preventive Treatment has dramatically reduced since last quarter.",
+  pct.diff < 1 ~ "Your reported TB Preventive Treatment has reducedd since last quarter",
+  pct.diff < 50 ~ "Your reported TB Preventive Treatment has increased increased since last quarter",
+  pct.diff > 51 ~ "Your reported TB Preventive Treatment has dramatically increased since last quarter",
+  TRUE ~ "Error or incomplete data.")) %>% view()
 
 
 ####
