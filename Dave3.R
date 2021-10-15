@@ -38,11 +38,11 @@ a1 %>% filter(indicatorname=="Case notification rate, bacteriologically positive
 ###Facility
 a1 %>% filter(indicatorname=="Case notification rate, bacteriologically positive new+relapse", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level=="facility") %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level)%>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100) %>% view()
 
-###All
+###All Levels
 a1 %>% filter(indicatorname=="Case notification rate, bacteriologically positive new+relapse", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level)%>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100) %>% view()
 
 
-###BC Comment
+##BC Comment
 ###Region
 a1 %>% filter(indicatorname=="Case notification rate, bacteriologically positive new+relapse", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level=="region") %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, level)%>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, BC_Comment=case_when(
   pct.diff < -50 ~ "Your reported BC enrollment has dramatically reduced since last quarter.",
@@ -75,13 +75,44 @@ a1 %>% filter(indicatorname=="Case notification rate, bacteriologically positive
   pct.diff > 51 ~ "Your reported BC enrollment has dramatically increased since last quarter",
   TRUE ~ "Error or incomplete data.")) %>% view()
 
-###All
+###All Levels
 a1 %>% filter(indicatorname=="Case notification rate, bacteriologically positive new+relapse", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level)%>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, BC_Comment=case_when(
   pct.diff < -50 ~ "Your reported BC enrollment has dramatically reduced since last quarter.",
   pct.diff < 0 ~ "Your reported BC enrollment has reducedd since last quarter",
   pct.diff < 50 ~ "Your reported BC enrollment has increased increased since last quarter",
   pct.diff > 51 ~ "Your reported BC enrollment has dramatically increased since last quarter",
   TRUE ~ "Error or incomplete data.")) %>% view()
+
+##DRTB
+###Computation with BC Comment
+####All Levels
+a1 %>% filter(indicatorname=="Treatment Success, DRTB (inc. RR-,MDR-, and XDR-TB)", periodvalue %in% c("APR-JUN-2020", "JUL-SEP-2020"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level) %>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2020`, Q3=`JUL-SEP-2020`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, BC_Comment=case_when(
+  pct.diff < -50 ~ "Your reported DRTB Treatment Outcome has dramatically reduced since last quarter.",
+  pct.diff < 0 ~ "Your reported DRTB Treatment Outcome has reducedd since last quarter",
+  pct.diff < 50 ~ "Your reported DRTB Treatment Outcomet has increased increased since last quarter",
+  pct.diff > 51 ~ "Your reported DRTB Treatment Outcome has dramatically increased since last quarter",
+  TRUE ~ "Error or incomplete data.")) %>% view()
+
+##POP Testing
+###Computation with BC Comment
+####All Levels
+a1 %>% filter(indicatorname=="Population testing rate", periodvalue %in% c("APR-JUN-2021", "JUL-SEP-2021"), level %in% c("region", "province", "municipality", "facility")) %>% select(numerator, periodvalue, countryname, indicatorname, provincename, districtname, facilityname, level) %>% pivot_wider(names_from = periodvalue, values_from = numerator) %>% rename(Q2=`APR-JUN-2021`, Q3=`JUL-SEP-2021`) %>% mutate(pct.diff=(Q3-Q2)/Q3 *100, BC_Comment=case_when(
+  pct.diff < -50 ~ "Your reported Population Testing has dramatically reduced since last quarter.",
+  pct.diff < 0 ~ "Your reported Population Testing has reducedd since last quarter",
+  pct.diff < 50 ~ "Your reported Population Testing has increased increased since last quarter",
+  pct.diff > 51 ~ "Your reported Population Testing has dramatically increased since last quarter",
+  TRUE ~ "Error or incomplete data.")) %>% view()
+
+
+
+
+
+
+
+
+
+
+
 
 
 ####
