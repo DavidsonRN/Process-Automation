@@ -1,0 +1,12 @@
+Some GIT helps
+
+To bring in changes from the main into your dev branch
+1. commit everything clean
+2. switch to dev branch
+3. open shell
+4. type: git rebase main
+
+=======
+Dave and Tom can both work on main for right now
+
+Another workflow can be to work on dev and then when dev looks good it can merge to main with a pull request on github
